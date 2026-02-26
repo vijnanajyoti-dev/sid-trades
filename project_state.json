@@ -1,0 +1,327 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 11,
+  "summary": "Sid Trades – a personal trading journal and learning platform on the Internet Computer. Phase 1 (Core MVP) is complete. Phase 2 (membership roles, field-level visibility, admin role-assignment) is complete. Phase 3 additions in progress: Alpha Vantage delayed market price integration (with 1-hour caching, configurable API key), trade list table column update (replace Result column with Stop Loss column), and fix for non-functional admin field visibility toggles.",
+  "architectural_notes": [
+    "Platform: Internet Computer (ICP) with Internet Identity for authentication",
+    "Admin-only auth for Phase 1; membership tiers and field-level visibility deferred to later phases",
+    "Mobile-first, professional finance-style UI with dark/light mode planned for future phases",
+    "Phase 2: Role-based access (Free User, Premium User, Admin) with per-principal role storage in backend",
+    "Phase 2: Field-level visibility config stored in backend; frontend filters fields based on authenticated user's role",
+    "Alpha Vantage API key is configurable via environment/config file; responses cached client-side for minimum 1 hour to respect free-tier rate limits"
+  ],
+  "known_issues": [
+    "Deployment failed after successful code generation; deployment configuration needs investigation and fix",
+    "Admin field visibility toggles are non-functional (cannot be turned on/off) – fix in progress",
+    "Version 4 deployment did not apply changes: Result column still present, Stop Loss not shown, current price not displayed, field visibility toggles still broken"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-build-a-public-trade-list-page-showing-all-trades-in-a-responsive-table-card-grid-include-filter-controls-for-category-status-and-result-and-a-search-input-for-script-name-filters-and-search-should-be-applied-client-side-on-the-fetched-trade-list-the-page-must-display-columns-date-script-name-category-result-status-entry-price-exit-price",
+      "title": "Build a public Trade List page showing all trades in a responsive table/card grid. Include filter controls for Category, Status, and Result, and a search input for Script Name. Filters and search should be applied client-side on the fetched trade list. The page must display columns: Date, Script Name, Category, Result, Status, Entry Price, Exit Price.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-public-trade-detail-page-that-displays-all-fields-of-a-single-trade-in-a-structured-clearly-labeled-layout-the-page-is-accessible-via-a-route-like-trade-id-group-fields-logically-trade-info-date-script-category-sector-market-cap-time-frame-pricing-entry-price-exit-price-stop-loss-outcome-result-status-and-learnings-notes-learning-mistakes",
+      "title": "Build a public Trade Detail page that displays all fields of a single trade in a structured, clearly labeled layout. The page is accessible via a route like /trade/:id. Group fields logically: Trade Info (Date, Script, Category, Sector, Market Cap, Time Frame), Pricing (Entry Price, Exit Price, Stop Loss), Outcome (Result, Status), and Learnings (Notes, Learning/Mistakes).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-internet-identity-login-using-the-existing-useinternetidentity-hook-after-login-check-if-the-authenticated-principal-is-the-registered-admin-if-admin-show-a-navigation-link-to-the-admin-dashboard-non-authenticated-users-can-browse-public-pages-trade-list-trade-detail-but-cannot-access-admin-routes-redirect-unauthenticated-users-away-from-admin-routes",
+      "title": "Implement Internet Identity login using the existing useInternetIdentity hook. After login, check if the authenticated principal is the registered admin. If admin, show a navigation link to the Admin Dashboard. Non-authenticated users can browse public pages (trade list, trade detail) but cannot access admin routes. Redirect unauthenticated users away from /admin routes.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-admin-dashboard-accessible-only-to-the-authenticated-admin-at-admin-the-dashboard-must-list-all-trades-with-edit-and-delete-buttons-per-row-plus-a-prominent-add-new-trade-button-that-opens-a-form-the-add-edit-form-must-include-all-trade-fields-with-appropriate-input-types-date-picker-dropdowns-for-variants-number-inputs-for-prices-text-areas-for-notes-on-submit-the-form-calls-createtrade-or-updatetrade-on-the-backend",
+      "title": "Build an Admin Dashboard accessible only to the authenticated admin at /admin. The dashboard must list all trades with Edit and Delete buttons per row, plus a prominent 'Add New Trade' button that opens a form. The add/edit form must include all trade fields with appropriate input types (date picker, dropdowns for variants, number inputs for prices, text areas for notes). On submit, the form calls createTrade or updateTrade on the backend.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-persistent-disclaimer-banner-visible-on-every-page-with-the-exact-text-this-is-a-personal-trading-journal-for-educational-purposes-only-it-is-not-financial-advice-or-trading-signals-the-banner-should-be-visually-prominent-e-g-top-of-page-distinct-background-color-and-not-dismissible",
+      "title": "Add a persistent disclaimer banner visible on every page with the exact text: 'This is a personal trading journal for educational purposes only. It is not financial advice or trading signals.' The banner should be visually prominent (e.g., top of page, distinct background color) and not dismissible.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-professional-finance-inspired-visual-theme-across-the-entire-app-use-a-dark-charcoal-near-black-base-with-gold-amber-and-emerald-green-accents-use-clean-sans-serif-typography-clear-data-table-styling-subtle-card-shadows-and-consistent-spacing-the-design-must-be-mobile-first-and-fully-responsive-across-all-pages",
+      "title": "Apply a professional, finance-inspired visual theme across the entire app. Use a dark charcoal/near-black base with gold/amber and emerald green accents. Use clean sans-serif typography, clear data-table styling, subtle card shadows, and consistent spacing. The design must be mobile-first and fully responsive across all pages.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-audit-and-fix-the-deployment-configuration-so-that-the-application-builds-and-deploys-successfully-to-the-internet-computer-this-includes-verifying-dfx-json-canister-definitions-ensuring-frontend-build-output-paths-are-correctly-mapped-confirming-motoko-backend-compiles-without-errors-and-resolving-any-dependency-or-network-configuration-issues-that-caused-the-previous-deployment-to-fail-do-not-alter-any-phase-1-feature-scope-or-logic",
+      "title": "Audit and fix the deployment configuration so that the application builds and deploys successfully to the Internet Computer. This includes verifying dfx.json canister definitions, ensuring frontend build output paths are correctly mapped, confirming Motoko backend compiles without errors, and resolving any dependency or network configuration issues that caused the previous deployment to fail. Do not alter any Phase 1 feature scope or logic.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-field-visibility-settings-panel-inside-the-existing-admin-dashboard-admin-page-the-panel-must-list-every-trade-field-with-a-toggle-or-dropdown-to-set-it-as-public-or-premium-only-changes-call-setfieldvisibility-on-the-backend-display-the-current-visibility-state-fetched-via-getfieldvisibilityconfig-on-load-do-not-alter-the-existing-trade-list-edit-delete-layout",
+      "title": "Add a Field Visibility Settings panel inside the existing Admin Dashboard (/admin page). The panel must list every trade field with a toggle or dropdown to set it as Public or Premium Only. Changes call setFieldVisibility on the backend. Display the current visibility state fetched via getFieldVisibilityConfig on load. Do not alter the existing trade list/edit/delete layout.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-role-management-panel-inside-the-existing-admin-dashboard-admin-page-the-panel-must-show-a-list-of-registered-principals-and-their-current-roles-and-allow-the-admin-to-change-any-user-s-role-via-a-dropdown-freeuser-premiumuser-admin-changes-call-setuserrole-on-the-backend-do-not-alter-the-existing-ui-sections",
+      "title": "Add a User Role Management panel inside the existing Admin Dashboard (/admin page). The panel must show a list of registered principals and their current roles, and allow the admin to change any user's role via a dropdown (FreeUser, PremiumUser, Admin). Changes call setUserRole on the backend. Do not alter the existing UI sections.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-public-trade-detail-page-trade-id-and-trade-list-page-use-the-caller-s-resolved-role-fetched-via-getuserrole-using-the-authenticated-principal-or-freeuser-if-unauthenticated-along-with-getfieldvisibilityconfig-to-conditionally-render-trade-fields-fields-marked-premiumonly-must-be-hidden-or-replaced-with-a-premium-only-placeholder-for-freeuser-unauthenticated-viewers-premiumuser-and-admin-viewers-see-all-fields",
+      "title": "On the public Trade Detail page (/trade/:id) and Trade List page (/), use the caller's resolved role (fetched via getUserRole using the authenticated principal, or FreeUser if unauthenticated) along with getFieldVisibilityConfig to conditionally render trade fields. Fields marked PremiumOnly must be hidden or replaced with a 'Premium Only' placeholder for FreeUser/unauthenticated viewers. PremiumUser and Admin viewers see all fields.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Trade journal data model with all required fields (Date, Script, Category, Entry/Exit Price, Stop Loss, Time Frame, Market Cap, Industry, Result, Status, Notes, Learning/Mistakes)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Admin functionality: create, edit, delete trades; clean admin dashboard",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Public trade list page with filters (Category, Status, Result) and search by Script Name",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Trade detail page with full structured layout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Internet Identity login with admin-only role",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Prominent disclaimer banner on all pages: non-financial-advice notice",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "10 realistic dummy/demo trade entries",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Create a trade journal data model in the backend with the following fields: date (Text), scriptName (Text), category (variant: Equity | Options | Futures | Forex), entryPrice (Float), exitPrice (Float), stopLoss (Float), timeFrame (variant: Intraday | Swing | LongTerm), marketCap (variant: Small | Mid | Large), sector (Text), result (variant: Profit | Loss | Breakeven), status (variant: Open | Closed), notes (Text), learningMistakes (Text). Include a unique auto-incremented id (Nat) and store all trades in a stable var array/map.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Implement backend CRUD functions for trades: createTrade, updateTrade, deleteTrade (admin-only), getTrade(id), listTrades (public). Admin-only functions must verify the caller's principal against a stored admin principal. Include a setAdmin function callable only by the canister owner.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Seed the backend with 10 realistic dummy trade entries covering a variety of categories (Equity, Options, Futures, Forex), timeframes, market caps, sectors, and results (mix of Profit, Loss, Breakeven) and statuses (Open, Closed). Seed data should be initialized in a postupgrade or init hook if trades array is empty.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add membership roles: Free User, Premium User, Admin – with role stored per principal in the backend",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Field-level visibility: allow admin to mark each trade field as Public or Premium Only; store visibility config in backend",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Access rules: Public users see only public fields, Premium users see all fields, Admin sees all fields",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Admin role-assignment control: simple UI for admin to assign/change roles for users",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Extend the backend Motoko actor to support a UserRole type with variants: FreeUser, PremiumUser, Admin. Store a stable mapping of Principal -> UserRole. Provide functions: setUserRole(principal, role) callable only by the admin principal, getUserRole(principal) returning the role for a given principal, and listUsers() returning all registered principals and their roles (admin-only).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Extend the backend to store a FieldVisibility configuration that maps each trade field name to a visibility level: Public or PremiumOnly. Provide admin-only functions setFieldVisibility(fieldName: Text, level: FieldVisibilityLevel) and getFieldVisibilityConfig() returning the full map. Initialize all fields as Public by default.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Modify the backend getTrade and listTrades functions to accept an optional caller principal and apply field-level visibility filtering before returning trade data. Public callers receive only fields marked as Public. PremiumUser and Admin callers receive all fields. Fields filtered out for the caller should be returned as null or omitted. Do not break the existing function signatures; use optional/overloaded variants if needed.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Integrate Alpha Vantage API (free tier) for delayed market prices: fetch by ticker symbol, 1-hour cache, display 'Current Price (Delayed)' and 'Last Updated' on trade list and detail pages, add market data disclaimer, make API key configurable via env/config file.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Update trade journal table: remove visible 'Result' column, add 'Stop Loss' column in its place. Keep Result in backend and detail pages. Preserve styling, sorting, and responsive behavior.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Fix admin field visibility toggles: make them fully functional, persist settings in backend storage, apply changes immediately after save, ensure settings survive refresh, and ensure frontend reflects updated permissions.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Create a frontend service/hook (e.g., useMarketPrice.ts) that fetches delayed market price data from the Alpha Vantage TIME_SERIES_DAILY or GLOBAL_QUOTE endpoint using the trade's scriptName as the ticker symbol. The API key must be read from a Vite environment variable (VITE_ALPHA_VANTAGE_API_KEY) defined in a .env file. Cache each ticker's response in-memory (or localStorage) for a minimum of 1 hour to stay within free-tier rate limits. The hook must expose: currentPrice (number | null), lastUpdated (string | null), and isLoading (boolean).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "On the Trade List page (TradeListPage.tsx), integrate the market price hook (REQ-17) for each visible trade row. Display 'Current Price: [value] (Delayed)' and 'Last Updated: [time]' beneath or alongside the trade's script name or in a dedicated column. Add a one-time disclaimer line below the table: 'Market data is delayed and for reference only.' Apply the existing finance theme styling (gold/amber accents, consistent typography).",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "On the Trade Detail page (TradeDetailPage.tsx), integrate the market price hook (REQ-17) using the trade's scriptName as the ticker. Display 'Current Price: [value] (Delayed)' and 'Last Updated: [time]' in the Pricing section card. Add the disclaimer 'Market data is delayed and for reference only.' within or below the Pricing section.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Update the main trade journal table on the Trade List page (TradeListPage.tsx): remove the visible 'Result' column from the table header and rows, and add a 'Stop Loss' column in the same position. The Result field must remain in the Trade type, backend, and Trade Detail page — only the Trade List table column visibility is changed. Preserve all existing column styling, sort behavior, and responsive (mobile card) layout.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Fix the Field Visibility Settings panel in the Admin Dashboard (AdminPage.tsx). Currently the toggle controls render but do not respond to interaction. Rewrite the toggle state management so that: (1) each toggle reads its initial value from getFieldVisibilityConfig on load, (2) toggling a switch immediately calls setFieldVisibility on the backend actor with the updated value, (3) the UI reflects the new state after the call completes, (4) on page refresh the saved state is re-fetched and correctly shown. Do not change the layout of the panel or affect the User Role Management or trade CRUD sections.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "In TradeListPage.tsx, remove the 'Result' column from the trade table header and all trade rows, and add a 'Stop Loss' column in its place. The stopLoss field value must be read from each trade object and formatted as a price. The Result field must remain in the Trade type, backend data model, and Trade Detail page — only the Trade List table column is changed. Preserve all existing column styling, responsive mobile card layout, and sort/filter behavior.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Create or fully rewrite frontend/src/hooks/useMarketPrice.ts. The hook accepts a ticker symbol string and fetches delayed market price data from the Alpha Vantage GLOBAL_QUOTE endpoint (https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=SYMBOL&apikey=KEY). The API key must be read from the Vite environment variable VITE_ALPHA_VANTAGE_API_KEY defined in a .env file at the project root. Cache each ticker's response in localStorage with a timestamp; skip re-fetching if the cached entry is less than 60 minutes old. The hook must expose: currentPrice (number | null), lastUpdated (string | null), and isLoading (boolean). On API error or missing key, currentPrice and lastUpdated must be null and no error must be thrown to the caller.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "In TradeListPage.tsx, integrate the useMarketPrice hook (REQ-23) for each trade row. Display 'Current Price (Delayed): [value]' and 'Last Updated: [time]' within the trade row or beneath the script name. Add a single disclaimer line below the table: 'Market data is delayed and for reference only.' Style the price display using the existing gold/amber accent tokens. Show a subtle loading indicator while isLoading is true. If currentPrice is null, show a dash or 'N/A'.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "In TradeDetailPage.tsx, integrate the useMarketPrice hook (REQ-23) using the trade's scriptName as the ticker symbol. Inside the Pricing section card, display 'Current Price (Delayed): [value]' and 'Last Updated: [time]'. Add the disclaimer 'Market data is delayed and for reference only.' within or directly below the Pricing section. If currentPrice is null, display 'N/A'. Show a loading state while fetching.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Fully rewrite the Field Visibility Settings panel in AdminPage.tsx to fix non-functional toggle controls. The rewrite must: (1) on component mount, call getFieldVisibilityConfig via the backend actor and populate local React state with the returned map of fieldName -> visibility level; (2) render each field as a labeled toggle switch whose checked state is driven by the local React state; (3) when a toggle is changed, immediately call setFieldVisibility(fieldName, newLevel) on the backend actor and update local state upon successful response; (4) on page refresh, re-fetch getFieldVisibilityConfig so persisted values are restored; (5) display a visual loading/saving indicator during async calls; (6) handle errors gracefully with a user-facing message. Do not change the layout of the panel or affect the User Role Management section or the trade CRUD section.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Add a VITE_ALPHA_VANTAGE_API_KEY entry to the project's .env file (and .env.example if it exists) so the Alpha Vantage API key is available to the Vite build. The value in .env should be set to 'demo' as a safe default so the app builds and runs without requiring a real key. Document in a comment that developers must replace 'demo' with a real key for production use.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Sid Trades",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

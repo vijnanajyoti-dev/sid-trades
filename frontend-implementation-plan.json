@@ -1,0 +1,121 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix: Stop Loss column, Alpha Vantage price display, and admin field visibility toggles",
+  "requirements": [
+    {
+      "id": "REQ-22",
+      "summary": "Replace Result column with Stop Loss column in Trade List table while preserving Result field elsewhere",
+      "acceptanceCriteria": [
+        "The Trade List table header does NOT contain a 'Result' column",
+        "The Trade List table header DOES contain a 'Stop Loss' column",
+        "Each trade row displays the stopLoss value in the Stop Loss column",
+        "The Trade Detail page still shows the Result field",
+        "Mobile card layout reflects the same column change",
+        "All existing filters, sorting, and styling remain intact"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TradeListPage.tsx",
+          "operation": "modify",
+          "description": "In the trade table header array, remove the 'Result' column entry and add a 'Stop Loss' column entry in its place. In the table body mapping, remove the Result cell rendering code and add a Stop Loss cell that reads trade.stopLoss, formats it using formatPrice utility, and applies the same styling classes as other price columns. In the mobile card layout section, replace the Result field display with a Stop Loss field display using the same formatting and layout pattern. Preserve all existing column ordering, responsive breakpoints, filter logic, sort handlers, and CSS classes for other columns."
+        }
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "summary": "Create useMarketPrice hook for fetching delayed Alpha Vantage market data with localStorage caching",
+      "acceptanceCriteria": [
+        "useMarketPrice hook file exists at frontend/src/hooks/useMarketPrice.ts",
+        "Hook reads API key from import.meta.env.VITE_ALPHA_VANTAGE_API_KEY",
+        "Hook calls Alpha Vantage GLOBAL_QUOTE endpoint with the provided symbol",
+        "Responses are cached in localStorage per ticker for at least 60 minutes",
+        "Hook returns { currentPrice, lastUpdated, isLoading }",
+        "If API key is missing or request fails, currentPrice and lastUpdated are null without throwing"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useMarketPrice.ts",
+          "operation": "create",
+          "description": "Create a custom React hook that accepts a ticker symbol string parameter. On mount or symbol change, check localStorage for a cached entry keyed by the ticker symbol; if found and timestamp is less than 60 minutes old, return the cached data immediately. Otherwise, fetch from https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={key} using the API key from import.meta.env.VITE_ALPHA_VANTAGE_API_KEY. Parse the 'Global Quote' object from the response, extract '05. price' as currentPrice (convert to number), store the result with a timestamp in localStorage, and return { currentPrice: number | null, lastUpdated: string | null, isLoading: boolean }. If the API key is missing, the request fails, or the response is invalid, set currentPrice and lastUpdated to null without throwing an error. Use React.useState for state management and React.useEffect for fetch logic."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Integrate useMarketPrice hook into Trade List page to display delayed current prices for each trade row",
+      "acceptanceCriteria": [
+        "Each trade row in the Trade List displays 'Current Price (Delayed):' with the fetched value or 'N/A'",
+        "Each trade row shows 'Last Updated:' with the timestamp or 'N/A'",
+        "A disclaimer 'Market data is delayed and for reference only.' appears once below the table",
+        "A loading indicator is shown while the price is being fetched",
+        "Styling uses existing gold/amber accent colors and matches the app's finance theme"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TradeListPage.tsx",
+          "operation": "modify",
+          "description": "Import the useMarketPrice hook from '../hooks/useMarketPrice'. For each trade row in the table body, call useMarketPrice(trade.scriptName) to fetch the delayed market price. Within each trade row (or beneath the script name cell), add a display section showing 'Current Price (Delayed): {currentPrice || 'N/A'}' formatted using formatPrice if currentPrice is available, and 'Last Updated: {lastUpdated || 'N/A'}'. Show a subtle loading spinner or skeleton while isLoading is true. Apply gold/amber accent color classes (e.g., text-amber-500) to the price display to match the existing finance theme. Below the entire trade table, add a single line of disclaimer text: 'Market data is delayed and for reference only.' styled consistently with existing disclaimer text. Ensure the mobile card layout also includes the same current price and last updated fields in a logical position within each card."
+        }
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "summary": "Integrate useMarketPrice hook into Trade Detail page Pricing section to display delayed current price",
+      "acceptanceCriteria": [
+        "Trade Detail Pricing section shows 'Current Price (Delayed):' with fetched value or 'N/A'",
+        "Trade Detail Pricing section shows 'Last Updated:' with timestamp or 'N/A'",
+        "Disclaimer 'Market data is delayed and for reference only.' is present in or below the Pricing section",
+        "Loading state is shown while price data is being fetched"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TradeDetailPage.tsx",
+          "operation": "modify",
+          "description": "Import the useMarketPrice hook from '../hooks/useMarketPrice'. Call useMarketPrice(trade.scriptName) at the component level. Inside the Pricing section card, add a new row displaying 'Current Price (Delayed): {currentPrice || 'N/A'}' formatted using formatPrice if available, and 'Last Updated: {lastUpdated || 'N/A'}'. Show a loading indicator (spinner or skeleton text) while isLoading is true. Add or append the disclaimer text 'Market data is delayed and for reference only.' within or directly below the Pricing section card, styled to match existing section disclaimer patterns. Use the same gold/amber accent styling as applied in the Trade List page for visual consistency."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Fully rewrite the Field Visibility Settings panel in AdminPage to fix non-functional toggle controls with proper backend integration",
+      "acceptanceCriteria": [
+        "On load, toggles reflect the current state fetched from getFieldVisibilityConfig",
+        "Clicking a toggle calls setFieldVisibility on the backend actor with the correct fieldName and new level",
+        "After the call completes, the toggle visually reflects the new state",
+        "On page refresh, toggled values are correctly restored from the backend",
+        "A loading/saving indicator is shown during async operations",
+        "Errors surface as a user-facing message without crashing the page",
+        "The User Role Management section and trade CRUD section are unaffected"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminPage.tsx",
+          "operation": "modify",
+          "description": "Completely rewrite the Field Visibility Settings panel section within AdminPage.tsx. On component mount, use React.useEffect to call getFieldVisibilityConfig() from the backend actor (accessed via useActor hook) and populate a local React.useState object that maps fieldName to FieldVisibilityLevel. Render each field as a labeled toggle switch (using shadcn/ui Switch component if available) whose checked state is driven by the local state map. When a toggle is changed, immediately call setFieldVisibility(fieldName, newLevel) on the backend actor, show a visual saving indicator during the async call, update the local state upon successful response, and handle errors gracefully by displaying a user-facing error message (e.g., using a toast or inline alert). On page refresh, re-fetch getFieldVisibilityConfig to ensure persisted backend values are restored. Do not modify the layout structure of the Field Visibility panel itself, and ensure the User Role Management section and the trade CRUD section remain completely unaffected by this rewrite."
+        }
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "summary": "Add VITE_ALPHA_VANTAGE_API_KEY to .env file with 'demo' default value and usage documentation",
+      "acceptanceCriteria": [
+        ".env file contains VITE_ALPHA_VANTAGE_API_KEY=demo",
+        "A comment in .env explains that 'demo' should be replaced with a real Alpha Vantage API key",
+        "The Vite build does not fail due to missing environment variable"
+      ],
+      "file_operations": [
+        {
+          "path": ".env",
+          "operation": "modify",
+          "description": "Add a new line containing 'VITE_ALPHA_VANTAGE_API_KEY=demo'. Above this line, add a comment explaining: '# Alpha Vantage API key for fetching delayed market data. Replace \"demo\" with a real API key from https://www.alphavantage.co for production use.' This ensures the Vite build has access to the environment variable and the app can run without requiring developers to immediately provide a real key."
+        },
+        {
+          "path": ".env.example",
+          "operation": "modify",
+          "description": "If .env.example exists, add the same 'VITE_ALPHA_VANTAGE_API_KEY=demo' entry with the same explanatory comment as in .env, so new developers know to configure this variable when setting up their local environment."
+        }
+      ]
+    }
+  ]
+}

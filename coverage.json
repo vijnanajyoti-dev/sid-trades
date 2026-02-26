@@ -1,0 +1,79 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-25T18:37:29.369Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 6,
+    "implemented": 0,
+    "items": [
+      {
+        "id": "REQ-22",
+        "summary": "In TradeListPage.tsx, remove the 'Result' column from the trade table header and all trade rows, and add a 'Stop Loss' column in its place. The stopLoss field value must be read from each trade object and formatted as a price. The Result field must remain in the Trade type, backend data model, and Trade Detail page — only the Trade List table column is changed. Preserve all existing column styling, responsive mobile card layout, and sort/filter behavior.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/TradeListPage.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-23",
+        "summary": "Create or fully rewrite frontend/src/hooks/useMarketPrice.ts. The hook accepts a ticker symbol string and fetches delayed market price data from the Alpha Vantage GLOBAL_QUOTE endpoint (https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=SYMBOL&apikey=KEY). The API key must be read from the Vite environment variable VITE_ALPHA_VANTAGE_API_KEY defined in a .env file at the project root. Cache each ticker's response in localStorage with a timestamp; skip re-fetching if the cached entry is less than 60 minutes old. The hook must expose: currentPrice (number | null), lastUpdated (string | null), and isLoading (boolean). On API error or missing key, currentPrice and lastUpdated must be null and no error must be thrown to the caller.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/hooks/useMarketPrice.ts"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-24",
+        "summary": "In TradeListPage.tsx, integrate the useMarketPrice hook (REQ-23) for each trade row. Display 'Current Price (Delayed): [value]' and 'Last Updated: [time]' within the trade row or beneath the script name. Add a single disclaimer line below the table: 'Market data is delayed and for reference only.' Style the price display using the existing gold/amber accent tokens. Show a subtle loading indicator while isLoading is true. If currentPrice is null, show a dash or 'N/A'.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/TradeListPage.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-25",
+        "summary": "In TradeDetailPage.tsx, integrate the useMarketPrice hook (REQ-23) using the trade's scriptName as the ticker symbol. Inside the Pricing section card, display 'Current Price (Delayed): [value]' and 'Last Updated: [time]'. Add the disclaimer 'Market data is delayed and for reference only.' within or directly below the Pricing section. If currentPrice is null, display 'N/A'. Show a loading state while fetching.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/TradeDetailPage.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-26",
+        "summary": "Fully rewrite the Field Visibility Settings panel in AdminPage.tsx to fix non-functional toggle controls. The rewrite must: (1) on component mount, call getFieldVisibilityConfig via the backend actor and populate local React state with the returned map of fieldName -> visibility level; (2) render each field as a labeled toggle switch whose checked state is driven by the local React state; (3) when a toggle is changed, immediately call setFieldVisibility(fieldName, newLevel) on the backend actor and update local state upon successful response; (4) on page refresh, re-fetch getFieldVisibilityConfig so persisted values are restored; (5) display a visual loading/saving indicator during async calls; (6) handle errors gracefully with a user-facing message. Do not change the layout of the panel or affect the User Role Management section or the trade CRUD section.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/AdminPage.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-27",
+        "summary": "Add a VITE_ALPHA_VANTAGE_API_KEY entry to the project's .env file (and .env.example if it exists) so the Alpha Vantage API key is available to the Vite build. The value in .env should be set to 'demo' as a safe default so the app builds and runs without requiring a real key. Document in a comment that developers must replace 'demo' with a real key for production use.",
+        "status": "missing",
+        "plannedFiles": [
+          ".env",
+          ".env.example"
+        ],
+        "matchedFiles": []
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-implementation-plan.json",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

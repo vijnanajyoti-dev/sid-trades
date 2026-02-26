@@ -1,0 +1,51 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-25T18:37:29.365Z",
+  "summary": "The diff only shows a modification to project_state.json (a metadata/state tracking file), with no actual source code changes. None of the required frontend implementation changes are present in the diff: no TradeListPage.tsx changes, no useMarketPrice.ts hook creation, no TradeDetailPage.tsx changes, no AdminPage.tsx rewrite, and no .env file additions.",
+  "missing_requirements": [
+    {
+      "id": "REQ-22",
+      "requirement": "In TradeListPage.tsx, remove the 'Result' column and add a 'Stop Loss' column in its place, reading stopLoss field from each trade object.",
+      "reason": "No changes to TradeListPage.tsx are present in the diff. Only project_state.json was modified.",
+      "evidence": [
+        "project_state.json"
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "requirement": "Create or fully rewrite frontend/src/hooks/useMarketPrice.ts with Alpha Vantage integration, localStorage caching, and the specified return interface.",
+      "reason": "No new files were added and no hooks file appears in the diff. The useMarketPrice.ts file is not created.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-24",
+      "requirement": "In TradeListPage.tsx, integrate useMarketPrice hook for each trade row, display current price and last updated, add disclaimer below the table.",
+      "reason": "No changes to TradeListPage.tsx are present in the diff.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-25",
+      "requirement": "In TradeDetailPage.tsx, integrate useMarketPrice hook, display current price and last updated in the Pricing section, add disclaimer.",
+      "reason": "No changes to TradeDetailPage.tsx are present in the diff.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-26",
+      "requirement": "Fully rewrite the Field Visibility Settings panel in AdminPage.tsx to fix non-functional toggle controls with backend integration, loading indicators, and error handling.",
+      "reason": "No changes to AdminPage.tsx are present in the diff.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-27",
+      "requirement": "Add VITE_ALPHA_VANTAGE_API_KEY=demo to the project's .env file with a comment explaining it should be replaced for production.",
+      "reason": "No .env file was added or modified in the diff.",
+      "evidence": []
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.97,
+  "changed_files": [
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "frontend/src/index.css": "Global styles with dark finance-themed OKLCH color system featuring charcoal base, gold/amber primary, and emerald green accents, plus Inter/JetBrains Mono font imports and custom scrollbar styling.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the design system with Inter/JetBrains Mono fonts, finance-themed color tokens (gold, emerald, success, warning), and card/gold box shadows.",
+  "frontend/src/types/trade.ts": "TypeScript type definitions for all trade-related types including TradeCategory, TradeTimeFrame, TradeMarketCap, TradeResult, TradeStatus, Trade interface, and TradeFormData.",
+  "frontend/src/data/demoTrades.ts": "10 realistic demo trade entries covering Equity, Options, Futures, and Forex categories with varied results (Profit/Loss/Breakeven) and statuses (Open/Closed).",
+  "frontend/src/store/tradeStore.ts": "Zustand store managing the trade list with full CRUD operations (createTrade, updateTrade, deleteTrade, getTrade, listTrades) initialized with demo data.",
+  "frontend/src/hooks/useQueries.ts": "Custom hooks wrapping the Zustand trade store with a React Query-compatible API for listing, getting, creating, updating, and deleting trades.",
+  "frontend/src/lib/utils.ts": "Utility functions for class merging, formatting, P&L calculation, and badge color helpers — extended with a new `shouldShowField` function that determines field visibility based on caller role and the visibility config array.",
+  "frontend/src/components/DisclaimerBanner.tsx": "Persistent non-dismissible disclaimer banner displayed at the top of every page with the required educational-purposes-only text.",
+  "frontend/src/components/Header.tsx": "Sticky navigation header with logo, nav links (Trade Journal + Admin for authenticated admins), Internet Identity login/logout, and responsive mobile menu.",
+  "frontend/src/components/Footer.tsx": "App footer with copyright year, caffeine.ai attribution link with UTM tracking, and a heart icon.",
+  "frontend/src/components/TradeBadge.tsx": "Reusable badge component rendering color-coded labels for trade result, status, and category values.",
+  "frontend/src/components/TradeForm.tsx": "Full trade entry form with all fields (date, script, category, sector, timeframe, market cap, prices, result, status, notes, learnings) with validation and submit/cancel actions.",
+  "frontend/src/pages/TradeListPage.tsx": "Public trade list page extended to fetch the caller's role and public field visibility config, then conditionally render `PremiumFieldPlaceholder` for premium-only fields (entry, exit, P&L) when the viewer is a free/guest user. Also shows a role badge in the page header.",
+  "frontend/src/pages/TradeDetailPage.tsx": "Public trade detail page extended to fetch caller role and field visibility config, replacing premium-only field values (entry price, exit price, stop loss, notes, P&L) with `PremiumFieldPlaceholder` for free/guest viewers while keeping the full section structure intact.",
+  "frontend/src/pages/AdminPage.tsx": "Admin dashboard extended with two new collapsible panels below the existing trade table — `FieldVisibilityPanel` (toggle each trade field between Public/Premium Only) and `UserRoleManagementPanel` (list all users and change their roles via dropdown). All Phase 1 trade CRUD functionality is fully preserved.",
+  "frontend/src/App.tsx": "Root app component with TanStack Router setup defining routes for /, /trade/:id, and /admin, all wrapped in a Layout with disclaimer banner, header, and footer.",
+  "frontend/index.html": "HTML entry point with dark class, favicon pointing to the generated logo, and proper meta tags for the Sid Trades app.",
+  "frontend/src/hooks/useFieldVisibility.ts": "New custom hook file providing three React Query hooks — `useGetFieldVisibilityConfig` (admin-only full config), `useGetPublicFieldVisibility` (public config for all viewers), and `useSetFieldVisibility` (admin mutation to toggle field visibility levels).",
+  "frontend/src/hooks/useUserRoles.ts": "New custom hook file providing `useGetCallerUserRole` (fetches current user's role), `useListUsers` (admin-only list of all principals and roles), and `useSetUserRole` (admin mutation to change a user's role).",
+  "frontend/src/components/PremiumFieldPlaceholder.tsx": "New reusable component rendering a styled lock-icon badge with \"Premium Only\" text to replace hidden field values for free/guest users."
+}
